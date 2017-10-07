@@ -76,7 +76,7 @@ if __name__ == '__main__':
     """
 
     t = Template(backup_config)
-    config = yaml.load(t.render(UserName=getpass.getuser())) # apenas genial. 
+    config = yaml.load(t.render(UserName=getpass.getuser())) # ye.
     print(pprint(config))
 
     for job in config['Jobs']:
