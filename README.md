@@ -8,6 +8,6 @@ and then the copy is initialized
 
 Just pay attention in what path or pen drive are you gonna copy the files. 
 
-In comments on the code i explaning about that.
+In comments in the code i explaining about that.
 
-More functions soon. 
+# More functions soon. 
