@@ -52,18 +52,18 @@ if __name__ == '__main__':
     Storages:
         - &Storage1 '/media/{{UserName}}/ANDROID/' 
         - &Storage2 '/media/{{UserName}}' 
-        - &Storage3 'F:\\MYLINUXLIVE\\{{UserName}}'
-        - &Storage4 'G:\\MYLINUXLIVE\\{{UserName}}'
-        - &Storage5 'H:\\MYLINUXLIVE\\{{UserName}}'
+        - &Storage3 'F:\\ANDROID\\{{UserName}}'
+        - &Storage4 'G:\\ANDROID\\{{UserName}}'
+        - &Storage5 'H:\\ANDROID\\{{UserName}}'
         - &Storage6 'C:\\Users'
     FileSets:
         - &LinuxSet
           - ['/home/{{UserName}}/Downloads', '.']
-          - ['/home', '.']
+          - ['/home{{UserName}}', '.']
         - &WindowsSet
-          - ['C:', '.']
-          - ['D:', '.']
-          - ['E:', '.']
+          - ['C:\\', '.']
+          - ['D:\\', '.']
+          - ['E:\\', '.']
     Jobs:
         - FileSet: *LinuxSet
           Storage: *Storage1
