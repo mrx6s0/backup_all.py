@@ -39,8 +39,6 @@ def copy_files(pattern, src_path, dest_path):
        
 def send_to_email():
     
-    
- 
     fromaddress = "email0@gmail.com"
     toaddress = "email@gmail.com" # mudar para mandar para a pessoa desejada
 
