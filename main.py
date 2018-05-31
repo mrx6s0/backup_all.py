@@ -6,6 +6,7 @@ import smtplib
 import os
 import re
 import shutil
+import zipfile
 
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
@@ -28,10 +29,48 @@ def copy_files(pattern, src_path, dest_path):
     for full_file_name in find_files(pattern, src_path):
         print(full_file_name) + ' file copied into ' + (dest_path)
         try:
-            shutil.copy(full_file_name, dest_path)
+             with zipfile.ZipFile(full_file_name + ".zip", "w") as zip_file:        
+				 zip_file.write(dest_path)
             #shutil.make_archive(full_file_name, 'zip', dest_path)
         except IOError:
             pass
+
+# função para mandar os arquivos copiados em formato .zip para o email desejado.
+       
+def send_to_email():
+    
+    
+ 
+    fromaddress = "email0@gmail.com"
+    toaddress = "email@gmail.com" # mudar para mandar para a pessoa desejada
+
+    msg = MIMEMultipart()
+
+    msg['de'] = fromaddress 
+    msg['para'] = toaddress
+    msg['assunto'] = "."
+
+    body = " . "
+
+    msg.attach(MIMEText(body, 'plain'))
+
+    full_file_name = "teste.zip" # rename to name of your path 
+    attachment = open(full_file_name, "rb")
+
+    part = MIMEBase('application', 'octet-stream') 
+    part.set_payload((attachment).read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', 'attachment; filename=' + full_file_name)
+
+    msg.attach(part)
+
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(fromaddress, "")
+    text = msg.as_string()
+    server.sendmail(fromaddress, toaddress, text)
+    print ("\nfeito\narquivo enviado")
+    server.quit()  
 
 if __name__ == '__main__':
 
@@ -56,7 +95,7 @@ if __name__ == '__main__':
         - &Storage6 'C:\\Users'
     FileSets:
         - &LinuxSet
-          - ['/home/{{UserName}}/Imagens', '.']
+          - ['/home/{{UserName}}/Faculdade', '.']
           - ['/home{{UserName}}', '.']
         - &WindowsSet
           - ['C:\\', '.']
@@ -91,40 +130,4 @@ if __name__ == '__main__':
         for fileset in job['FileSet']:
             print("copy_files('{}', '{}', '{}')".format(fileset[1], fileset[0], job['Storage']))
             copy_files(fileset[1], fileset[0], job['Storage'])
-            
-            pass
-
-# copia para a unidade USB indicada, ou para alguma pasta 
-
-# do a copy to a USB drive given, or some path
-
-fromaddress = "email0@gmail.com" # endereço de origem
-toaddress = "email1@gmail.com" # mudar para mandar para a pessoa desejada
-
-msg = MIMEMultipart()
-
-msg['de'] = fromaddress 
-msg['para'] = toaddress
-msg['assunto'] = "Teste_0"
-
-body = " Teste"
-
-msg.attach(MIMEText(body, 'plain'))
-
-filename = "teste.zip"
-attachment = open("teste.zip", "rb")
-
-part = MIMEBase('application', 'octet-stream') 
-part.set_payload((attachment).read())
-encoders.encode_base64(part)
-part.add_header('Content-Disposition', 'attachment; filename= %s' % filename)
-
-msg.attach(part)
-
-server = smtplib.SMTP('smtp.gmail.com', 587)
-server.starttls()
-server.login(fromaddress, "suasenha")
-text = msg.as_string()
-server.sendmail(fromaddress, toaddress, text)
-print '\nFeito!\nArquivo enviado\n'
-server.quit()
+    send_to_email()
